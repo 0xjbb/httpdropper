@@ -1,14 +1,16 @@
 #pragma once
 #include <windows.h>
+#include <wininet.h>
 #include <string>
 #include <vector>
 #include "TypeDefs.h"
-#include "Obfus.h"
+
+#pragma comment(lib, "wininet.lib")
 
 class Download
 {
 
 public:
-	std::string download(std::string host, std::string path, int port);
+	std::vector<char> DownloadFile(std::string szUrl);
 };
 

